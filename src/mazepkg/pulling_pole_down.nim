@@ -1,7 +1,11 @@
+## pulling_pole_down is the algorithm to generate a maze.
+##
+## pulling_pole_down は棒倒し法に基づいて迷路を生成するモジュールです。
+##
 ## See also
 ## ----
 ##
-## * http://www5d.biglobe.ne.jp/stssk/maze/make.html
+## * `迷路自動生成アルゴリズム <http://www5d.biglobe.ne.jp/stssk/maze/make.html>`_
 
 import sequtils, strutils, random
 
