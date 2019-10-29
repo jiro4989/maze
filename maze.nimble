@@ -7,7 +7,7 @@ license       = "MIT"
 srcDir        = "src"
 installExt    = @["nim"]
 bin           = @["maze"]
-
+binDir        = "bin"
 
 
 # Dependencies
