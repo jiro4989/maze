@@ -9,22 +9,24 @@ import mazepkg/submodule
 import sequtils, strutils, random
 
 const
-  width = 21
-  height = 21
   road = 0'u8
   wall = 1'u8
 
 type
-  Stage = array[height, array[width, byte]]
+  Maze* = seq[seq[byte]]
 
-var
-  stage: Stage
+proc newEmptyMaze(width, height: int): Maze =
+  for y in 0..<height:
+    var row: seq[byte]
+    for x in 0..<width:
+      row.add(road)
+    result.add(row)
 
-proc print(self: Stage) =
+proc print(self: Maze) =
   for row in self:
     echo row.mapIt(if it == wall: "x" else: " ").join()
 
-proc setFrame(self: var Stage) =
+proc setFrame(self: var Maze) =
   # top
   for x, col in self[0]:
     self[0][x] = wall
@@ -38,7 +40,7 @@ proc setFrame(self: var Stage) =
   for x, col in self[^1]:
     self[^1][x] = wall
 
-proc randPushDown(self: var Stage, x, y: int, noTop: bool) =
+proc randPushDown(self: var Maze, x, y: int, noTop: bool) =
   while true:
     let r = rand(4)
     var x2, y2: int
@@ -66,24 +68,27 @@ proc randPushDown(self: var Stage, x, y: int, noTop: bool) =
       self[y2][x2] = wall
       return
 
-when isMainModule:
-  randomize()
-  print(stage)
-  echo "-------"
-  setFrame(stage)
-  print(stage)
-  echo "-------"
+proc newMazeByPollingPoleDown*(width, height: int): Maze =
+  ## 棒倒し法で迷路を生成する。
+  result = newEmptyMaze(width, height)
+  result.setFrame()
+
   # 等間隔の内壁をセット
   for y in 1..<int(height/2):
     for x in 1..<int(width/2):
-      stage[y*2][x*2] = wall
-  echo "-------"
-  print(stage)
+      result[y*2][x*2] = wall
 
+  # 棒倒しを実施
+  randomize()
   for y in 1..<int(height/2):
     for x in 1..<int(width/2):
-      let noTop = y != 1 # 最初の一回の時以外は上に倒さない
-      stage.randPushDown(x*2, y*2, noTop)
-  echo "-------"
-  print(stage)
+      let noTop = y != 1 # 最初の一回目だけ上にも倒す
+      result.randPushDown(x*2, y*2, noTop)
+
+when isMainModule:
+  let
+    width = 21
+    height = 21
+  var maze = newMazeByPollingPoleDown(width, height)
+  print(maze)
 
