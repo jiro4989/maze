@@ -14,31 +14,38 @@ const
   wall = 1'u8
 
 type
-  Maze* = seq[seq[byte]]
+  Maze* = object
+    stage*: seq[seq[byte]]
+    width*, height*: int
+  Pos = object
+    x, y: int
 
 proc newMazeWithFilledWall(width, height: int): Maze =
+  result.width = width
+  result.height = height
   for y in 0..<height:
     var row: seq[byte]
     for x in 0..<width:
       row.add(wall)
-    result.add(row)
+    result.stage.add(row)
 
-proc setRoadFrame(self: var Maze) =
+proc setRoadFrame(maze: var Maze) =
   ## 一番外の外壁に道をセット
   # top
-  for x, col in self[0]:
-    self[0][x] = road
+  let stage = maze.stage
+  for x, col in stage[0]:
+    stage[0][x] = road
   # left
-  for y, row in self:
-    self[y][0] = road
+  for y, row in stage:
+    stage[y][0] = road
   # right
-  for y, row in self:
-    self[y][^1] = road
+  for y, row in stage:
+    stage[y][^1] = road
   # bottom
-  for x, col in self[^1]:
-    self[^1][x] = road
+  for x, col in stage[^1]:
+    stage[^1][x] = road
 
-proc randDig(self: var Maze, x, y: int) =
+proc randDig(maze: var Maze, x, y: int) =
   let r = rand(4)
   var x2, y2: int
   var x3, y3: int
@@ -67,25 +74,40 @@ proc randDig(self: var Maze, x, y: int) =
     x3 = x
     y2 = y + 1
     y3 = y + 1
-  let cell = self[y2][x2]
-  let cell2 = self[y3][x3]
+  let stage = maze.stage
+  let cell = stage[y2][x2]
+  let cell2 = stage[y3][x3]
   if cell == wall and cell2 == wall:
-    self[y2][x2] = road
+    maze.stage[y2][x2] = road
 
-proc isDiggable(self: Maze, x, y: int): bool =
+proc isDiggable(maze: Maze, x, y: int): bool =
+  let stage = maze.stage
   # top
-  if self[y-1][x] == wall and self[y-2][x] == wall:
+  if stage[y-1][x] == wall and stage[y-2][x] == wall:
     return true
   # left
-  if self[y][x-1] == wall and self[2][x-2] == wall:
+  if stage[y][x-1] == wall and stage[2][x-2] == wall:
     return true
   # right
-  if self[y][x+1] == wall and self[2][x+2] == wall:
+  if stage[y][x+1] == wall and stage[2][x+2] == wall:
     return true
   # buttom
-  if self[y+1][x] == wall and self[y+2][x] == wall:
+  if stage[y+1][x] == wall and stage[y+2][x] == wall:
     return true
   return false
+
+proc newStartPos(maze: Maze): Pos =
+  let width = maze.width
+  let height = maze.height
+  result.x = rand(width-4) + 2
+  result.y = rand(height-4) + 2
+
+proc isContinuableToDig(maze: Maze): bool =
+  ## 配置可能な全て載せるのdiggableをチェック
+  for y in 2..<maze.height-2:
+    for x in 2..<maze.width-2:
+      if maze.isDiggable(x, y):
+        return true
 
 proc newMazeByDigging*(width, height: int): Maze =
   ## 穴掘り法で迷路を生成する。
@@ -94,5 +116,6 @@ proc newMazeByDigging*(width, height: int): Maze =
   # ランダムに一箇所点を選ぶ。
   # 選んだ点が壁にならないようにする。
   randomize()
-  let startX = rand(width-4) + 2
-  let startY = rand(height-4) + 2
+  while result.isContinuableToDig():
+    var pos = result.newStartPos()
+    break
