@@ -1,5 +1,5 @@
-#import mazepkg/pulling_pole_down
-import mazepkg/dig
+import mazepkg/[pole_down, dig]
+export poledown, dig
 
 when isMainModule:
   let

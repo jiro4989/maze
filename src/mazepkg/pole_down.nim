@@ -64,7 +64,7 @@ proc newMazeByPoleDown*(width, height: int): Maze =
   # 等間隔の内壁をセット
   for y in 1..<int(height/2):
     for x in 1..<int(width/2):
-      result[y*2][x*2] = wall
+      result.stage[y*2][x*2] = wall
 
   # 棒倒しを実施
   randomize()
