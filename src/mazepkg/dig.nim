@@ -8,27 +8,7 @@
 ## * `迷路自動生成アルゴリズム <http://www5d.biglobe.ne.jp/stssk/maze/make.html>`_
 
 import sequtils, strutils, random, strformat
-import os
-
-const
-  road = 0'u8
-  wall = 1'u8
-
-type
-  Maze* = object
-    stage*: seq[seq[byte]]
-    width*, height*: int
-
-proc `$`*(self: Maze): string =
-  var rows: seq[string]
-  for row in self.stage:
-    rows.add(row.mapIt($it).join())
-  result = rows.join("\n")
-
-proc newMazeWithFilledWall(width, height: int): Maze =
-  result.width = width
-  result.height = height
-  result.stage = newSeqWith(height, newSeqWith(width, wall))
+import types
 
 proc setRoadFrame(maze: var Maze) =
   ## 一番外の外壁に道をセット
@@ -138,15 +118,11 @@ proc isContinuableToDig(maze: Maze): bool =
       if maze.isDiggable(x*2, y*2):
         return true
 
-proc format*(maze: Maze, r, w: string): string =
-  var rows: seq[string]
-  for row in maze.stage:
-    rows.add(row.mapIt(if it == road: r else: w ).join())
-  result = rows.join("\n")
-
 proc newMazeByDigging*(width, height: int): Maze =
   ## 穴掘り法で迷路を生成する。
-  result = newMazeWithFilledWall(width, height)
+  result.width = width
+  result.height = height
+  result.stage = newSeqWith(height, newSeqWith(width, wall))
   result.setRoadFrame()
   # ランダムに一箇所点を選ぶ。
   # 選んだ点が壁にならないようにする。
