@@ -3,7 +3,7 @@ import mazepkg/dig
 
 when isMainModule:
   let
-    width = 83
+    width = 43
     height = 41
   var maze = newMazeByDigging(width, height)
   #echo maze.format(" ", "#")

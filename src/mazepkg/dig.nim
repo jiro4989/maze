@@ -133,8 +133,8 @@ proc newStartPos(maze: Maze): tuple[x, y: int] =
 
 proc isContinuableToDig(maze: Maze): bool =
   ## 配置可能な全て載せるのdiggableをチェック
-  for y in 2..<int(maze.height/2):
-    for x in 2..<int(maze.width/2):
+  for y in 2..<int(maze.height/2-1):
+    for x in 2..<int(maze.width/2-1):
       if maze.isDiggable(x*2, y*2):
         return true
 
@@ -159,7 +159,10 @@ proc newMazeByDigging*(width, height: int): Maze =
       (x, y) = result.newStartPos()
       while result.stage[y][x] != road:
         (x, y) = result.newStartPos()
+        #echo &"x:{x}, y:{y}"
     (x, y) = result.newStartPos()
     while result.stage[y][x] != road:
       (x, y) = result.newStartPos()
+      #echo &"x:{x}, y:{y}"
+    #echo &"x:{x}, y:{y}"
 
