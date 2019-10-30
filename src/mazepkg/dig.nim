@@ -111,7 +111,7 @@ proc digDown(maze: var Maze, x, y: int): tuple[x, y: int] =
   return (x: x, y: y2)
 
 proc randDig(maze: var Maze, x, y: int): tuple[x, y: int] =
-  let r = rand(4)
+  let r = rand(3)
   case r
   of 0:
     # up
@@ -149,7 +149,7 @@ proc newMazeByDigging*(width, height: int): Maze =
   while result.isContinuableToDig():
     while result.isDiggable(x, y):
       (x, y) = result.randDig(x, y)
-      echo result
+      #echo result
       echo &"x:{x}, y:{y}"
       sleep 300
     (x, y) = result.newStartPos()
