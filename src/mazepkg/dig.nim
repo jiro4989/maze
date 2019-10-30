@@ -7,7 +7,7 @@
 ##
 ## * `迷路自動生成アルゴリズム <http://www5d.biglobe.ne.jp/stssk/maze/make.html>`_
 
-import sequtils, strutils, random
+import sequtils, strutils, random, strformat
 import os
 
 const
@@ -18,8 +18,6 @@ type
   Maze* = object
     stage*: seq[seq[byte]]
     width*, height*: int
-  Pos = object
-    x, y: int
 
 proc `$`*(self: Maze): string =
   var rows: seq[string]
@@ -52,48 +50,7 @@ proc setRoadFrame(maze: var Maze) =
   for x, col in stage[^1]:
     maze.stage[^1][x] = road
 
-proc randDig(maze: var Maze, pos: Pos): Pos =
-  let x = pos.x
-  let y = pos.y
-  let r = rand(4)
-  var x2, y2: int
-  var x3, y3: int
-  case r
-  of 0:
-    # top
-    x2 = x
-    x3 = x
-    y2 = y - 1
-    y3 = y - 2
-  of 1:
-    # left
-    x2 = x - 1
-    x3 = x - 2
-    y2 = y
-    y3 = y
-  of 2:
-    # right
-    x2 = x + 1
-    x3 = x + 2
-    y2 = y
-    y3 = y
-  else:
-    # buttom
-    x2 = x
-    x3 = x
-    y2 = y + 1
-    y3 = y + 2
-  let stage = maze.stage
-  let cell = stage[y2][x2]
-  let cell2 = stage[y3][x3]
-  if cell == wall and cell2 == wall:
-    maze.stage[y2][x2] = road
-    result.x = x2
-    result.y = y2
-
-proc isDiggable(maze: Maze, pos: Pos): bool =
-  let x = pos.x
-  let y = pos.y
+proc isDiggable(maze: Maze, x, y: int): bool =
   let stage = maze.stage
   # top
   if stage[y-1][x] == wall and stage[y-2][x] == wall:
@@ -109,30 +66,77 @@ proc isDiggable(maze: Maze, pos: Pos): bool =
     return true
   return false
 
-proc newStartPos(maze: Maze): Pos =
+proc digUp(maze: var Maze, x, y: int): tuple[x, y: int] =
+  var y2 = y
+  var cell = maze.stage[y2-1][x]
+  var cell2 = maze.stage[y2-2][x]
+  while cell == wall and cell2 == wall:
+    maze.stage[y2-1][x] = road
+    dec(y2)
+    cell = maze.stage[y2-1][x]
+    cell2 = maze.stage[y2-2][x]
+  return (x: x, y: y2-1)
+
+proc digLeft(maze: var Maze, x, y: int): tuple[x, y: int] =
+  var x2 = x
+  var cell = maze.stage[y][x-1]
+  var cell2 = maze.stage[y][x-2]
+  while cell == wall and cell2 == wall:
+    maze.stage[y][x2-1] = road
+    dec(x2)
+    cell = maze.stage[y][x2-1]
+    cell2 = maze.stage[y][x2-2]
+  return (x: x2-1, y: y)
+
+proc digRight(maze: var Maze, x, y: int): tuple[x, y: int] =
+  var x2 = x
+  var cell = maze.stage[y][x+1]
+  var cell2 = maze.stage[y][x+2]
+  while cell == wall and cell2 == wall:
+    maze.stage[y][x2+1] = road
+    inc(x2)
+    cell = maze.stage[y][x2+1]
+    cell2 = maze.stage[y][x2+2]
+  return (x: x2+1, y: y)
+
+proc digDown(maze: var Maze, x, y: int): tuple[x, y: int] =
+  var y2 = y
+  var cell = maze.stage[y2+1][x]
+  var cell2 = maze.stage[y2+2][x]
+  while cell == wall and cell2 == wall:
+    maze.stage[y2+1][x] = road
+    inc(y2)
+    cell = maze.stage[y2+1][x]
+    cell2 = maze.stage[y2+2][x]
+  return (x: x, y: y2+1)
+
+proc randDig(maze: var Maze, x, y: int): tuple[x, y: int] =
+  let r = rand(4)
+  case r
+  of 0:
+    # up
+    maze.digUp(x, y)
+  of 1:
+    # left
+    maze.digLeft(x, y)
+  of 2:
+    # right
+    maze.digRight(x, y)
+  else:
+    # down
+    maze.digDown(x, y)
+
+proc newStartPos(maze: Maze): tuple[x, y: int] =
   let width = maze.width
   let height = maze.height
-  result.x = rand(width-4) + 2
-  result.y = rand(height-4) + 2
+  (x: int((width-4)/2)*2 + 2, y: int((height-4)/2)*2 + 2)
 
 proc isContinuableToDig(maze: Maze): bool =
   ## 配置可能な全て載せるのdiggableをチェック
   for y in 2..<maze.height-2:
     for x in 2..<maze.width-2:
-      if maze.isDiggable(Pos(x: x, y: y)):
+      if maze.isDiggable(x, y):
         return true
-
-proc digging(maze: var Maze, pos: Pos) =
-  var p = pos
-  while maze.isDiggable(p):
-    # FIXME: ここ実装勘違いしてた
-    p = maze.randDig(p)
-    var zero: Pos
-    if p == zero:
-      return
-    echo maze
-    echo $p.x & "-" & $p.y
-    sleep 300
 
 proc newMazeByDigging*(width, height: int): Maze =
   ## 穴掘り法で迷路を生成する。
@@ -142,8 +146,10 @@ proc newMazeByDigging*(width, height: int): Maze =
   # 選んだ点が壁にならないようにする。
   randomize()
   while result.isContinuableToDig():
-    var pos = result.newStartPos()
-    if pos.x mod 2 == 1 or pos.y mod 2 == 1:
-      continue
-    result.digging(pos)
+    var (x, y) = result.newStartPos()
+    while result.isDiggable(x, y):
+      (x, y) = result.randDig(x, y)
+      echo result
+      echo &"x:{x}, y:{y}"
+      sleep 300
 
