@@ -133,10 +133,16 @@ proc newStartPos(maze: Maze): tuple[x, y: int] =
 
 proc isContinuableToDig(maze: Maze): bool =
   ## 配置可能な全て載せるのdiggableをチェック
-  for y in 2..<maze.height-2:
-    for x in 2..<maze.width-2:
-      if maze.isDiggable(x, y):
+  for y in 2..<int(maze.height/2):
+    for x in 2..<int(maze.width/2):
+      if maze.isDiggable(x*2, y*2):
         return true
+
+proc format*(maze: Maze, r, w: string): string =
+  var rows: seq[string]
+  for row in maze.stage:
+    rows.add(row.mapIt(if it == road: r else: w ).join())
+  result = rows.join("\n")
 
 proc newMazeByDigging*(width, height: int): Maze =
   ## 穴掘り法で迷路を生成する。
@@ -149,9 +155,7 @@ proc newMazeByDigging*(width, height: int): Maze =
   while result.isContinuableToDig():
     while result.isDiggable(x, y):
       (x, y) = result.randDig(x, y)
-      echo result
-      echo &"x:{x}, y:{y}"
-      sleep 300
+      echo result.format(" ", "#")
     (x, y) = result.newStartPos()
     let stg = result.stage
     while stg[y][x] != road:
