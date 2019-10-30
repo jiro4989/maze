@@ -1,10 +1,15 @@
 import mazepkg/[pole_down, dig]
 export poledown, dig
 
+proc main(width = 40, height = 40, randomSeed = true, seed = 0, printProcess = false): int =
+  if printProcess:
+    discard
+  else:
+    var maze = newMazeByDigging(width, height, randomSeed, seed)
+    echo maze.stage
+
 when isMainModule:
-  let
-    width = 43
-    height = 41
-  var maze = newMazeByDigging(width, height)
-  #echo maze.format(" ", "#")
+  import cligen
+  clCfg.version = "v0.1.0"
+  dispatch(main)
 

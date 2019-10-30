@@ -13,3 +13,4 @@ binDir        = "bin"
 # Dependencies
 
 requires "nim >= 1.0.2"
+requires "cligen >= 0.9.40"

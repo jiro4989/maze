@@ -118,15 +118,20 @@ proc isContinuableToDig(maze: Maze): bool =
       if maze.isDiggable(x*2, y*2):
         return true
 
-proc newMazeByDigging*(width, height: int): Maze =
+proc newMazeByDigging*(width, height: int, randomSeed = true, seed = 0): Maze =
   ## 穴掘り法で迷路を生成する。
   result.width = width
   result.height = height
   result.stage = newSeqWith(height, newSeqWith(width, wall))
   result.setRoadFrame()
+
+  if randomSeed:
+    randomize()
+  else:
+    randomize(seed)
+
   # ランダムに一箇所点を選ぶ。
   # 選んだ点が壁にならないようにする。
-  randomize()
   var (x, y) = result.newStartPos()
   while result.isContinuableToDig():
     while result.isDiggable(x, y):

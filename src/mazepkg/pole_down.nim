@@ -54,7 +54,7 @@ proc randPushDown(maze: var Maze, x, y: int, noTop: bool) =
       maze.stage[y2][x2] = wall
       return
 
-proc newMazeByPoleDown*(width, height: int): Maze =
+proc newMazeByPoleDown*(width, height: int, randomSeed = true, seed = 0): Maze =
   ## 棒倒し法で迷路を生成する。
   result.width = width
   result.height = height
@@ -66,8 +66,12 @@ proc newMazeByPoleDown*(width, height: int): Maze =
     for x in 1..<int(width/2):
       result.stage[y*2][x*2] = wall
 
+  if randomSeed:
+    randomize()
+  else:
+    randomize(seed)
+
   # 棒倒しを実施
-  randomize()
   for y in 1..<int(height/2):
     for x in 1..<int(width/2):
       let noTop = y != 1 # 最初の一回目だけ上にも倒す
