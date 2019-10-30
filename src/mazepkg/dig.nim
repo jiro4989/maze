@@ -75,7 +75,7 @@ proc digUp(maze: var Maze, x, y: int): tuple[x, y: int] =
     dec(y2)
     cell = maze.stage[y2-1][x]
     cell2 = maze.stage[y2-2][x]
-  return (x: x, y: y2-1)
+  return (x: x, y: y2)
 
 proc digLeft(maze: var Maze, x, y: int): tuple[x, y: int] =
   var x2 = x
@@ -86,7 +86,7 @@ proc digLeft(maze: var Maze, x, y: int): tuple[x, y: int] =
     dec(x2)
     cell = maze.stage[y][x2-1]
     cell2 = maze.stage[y][x2-2]
-  return (x: x2-1, y: y)
+  return (x: x2, y: y)
 
 proc digRight(maze: var Maze, x, y: int): tuple[x, y: int] =
   var x2 = x
@@ -97,7 +97,7 @@ proc digRight(maze: var Maze, x, y: int): tuple[x, y: int] =
     inc(x2)
     cell = maze.stage[y][x2+1]
     cell2 = maze.stage[y][x2+2]
-  return (x: x2+1, y: y)
+  return (x: x2, y: y)
 
 proc digDown(maze: var Maze, x, y: int): tuple[x, y: int] =
   var y2 = y
@@ -108,7 +108,7 @@ proc digDown(maze: var Maze, x, y: int): tuple[x, y: int] =
     inc(y2)
     cell = maze.stage[y2+1][x]
     cell2 = maze.stage[y2+2][x]
-  return (x: x, y: y2+1)
+  return (x: x, y: y2)
 
 proc randDig(maze: var Maze, x, y: int): tuple[x, y: int] =
   let r = rand(4)
@@ -129,7 +129,7 @@ proc randDig(maze: var Maze, x, y: int): tuple[x, y: int] =
 proc newStartPos(maze: Maze): tuple[x, y: int] =
   let width = maze.width
   let height = maze.height
-  (x: int((width-4)/2)*2 + 2, y: int((height-4)/2)*2 + 2)
+  (x: ((width-4)/2).int.rand*2+2, y: ((height-4)/2).int.rand*2+2)
 
 proc isContinuableToDig(maze: Maze): bool =
   ## 配置可能な全て載せるのdiggableをチェック
@@ -145,11 +145,15 @@ proc newMazeByDigging*(width, height: int): Maze =
   # ランダムに一箇所点を選ぶ。
   # 選んだ点が壁にならないようにする。
   randomize()
+  var (x, y) = result.newStartPos()
   while result.isContinuableToDig():
-    var (x, y) = result.newStartPos()
     while result.isDiggable(x, y):
       (x, y) = result.randDig(x, y)
       echo result
       echo &"x:{x}, y:{y}"
       sleep 300
+    (x, y) = result.newStartPos()
+    let stg = result.stage
+    while stg[y][x] != road:
+      (x, y) = result.newStartPos()
 
