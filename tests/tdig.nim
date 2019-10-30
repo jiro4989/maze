@@ -173,7 +173,7 @@ suite "newStartPos":
   test "奇数の位置以外を返却しないことの検証":
     for i in 1..10000:
       let (x, y) = maze.newStartPos()
-      check x mod 2 == 1
-      check y mod 2 == 1
-      check 2 < x and x < width - 2
-      check 2 < y and y < height - 2
+      check x mod 2 == 0
+      check y mod 2 == 0
+      check 2 <= x and x < width - 2
+      check 2 <= y and y < height - 2

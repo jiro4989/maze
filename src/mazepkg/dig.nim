@@ -129,7 +129,7 @@ proc randDig(maze: var Maze, x, y: int): tuple[x, y: int] =
 proc newStartPos(maze: Maze): tuple[x, y: int] =
   let width = maze.width
   let height = maze.height
-  (x: ((width-4)/2-1).int.rand*2+3, y: ((height-4)/2-1).int.rand*2+3)
+  (x: ((width-4)/2-1).int.rand*2+2, y: ((height-4)/2-1).int.rand*2+2)
 
 proc isContinuableToDig(maze: Maze): bool =
   ## 配置可能な全て載せるのdiggableをチェック
@@ -149,7 +149,7 @@ proc newMazeByDigging*(width, height: int): Maze =
   while result.isContinuableToDig():
     while result.isDiggable(x, y):
       (x, y) = result.randDig(x, y)
-      #echo result
+      echo result
       echo &"x:{x}, y:{y}"
       sleep 300
     (x, y) = result.newStartPos()
