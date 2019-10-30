@@ -28,11 +28,7 @@ proc `$`*(self: Maze): string =
 proc newMazeWithFilledWall(width, height: int): Maze =
   result.width = width
   result.height = height
-  for y in 0..<height:
-    var row: seq[byte]
-    for x in 0..<width:
-      row.add(wall)
-    result.stage.add(row)
+  result.stage = newSeqWith(height, newSeqWith(width, wall))
 
 proc setRoadFrame(maze: var Maze) =
   ## 一番外の外壁に道をセット
@@ -67,6 +63,7 @@ proc isDiggable(maze: Maze, x, y: int): bool =
   return false
 
 proc digUp(maze: var Maze, x, y: int): tuple[x, y: int] =
+  maze.stage[y][x] = road
   var y2 = y
   var cell = maze.stage[y2-1][x]
   var cell2 = maze.stage[y2-2][x]
@@ -78,6 +75,7 @@ proc digUp(maze: var Maze, x, y: int): tuple[x, y: int] =
   return (x: x, y: y2)
 
 proc digLeft(maze: var Maze, x, y: int): tuple[x, y: int] =
+  maze.stage[y][x] = road
   var x2 = x
   var cell = maze.stage[y][x-1]
   var cell2 = maze.stage[y][x-2]
@@ -89,6 +87,7 @@ proc digLeft(maze: var Maze, x, y: int): tuple[x, y: int] =
   return (x: x2, y: y)
 
 proc digRight(maze: var Maze, x, y: int): tuple[x, y: int] =
+  maze.stage[y][x] = road
   var x2 = x
   var cell = maze.stage[y][x+1]
   var cell2 = maze.stage[y][x+2]
@@ -100,6 +99,7 @@ proc digRight(maze: var Maze, x, y: int): tuple[x, y: int] =
   return (x: x2, y: y)
 
 proc digDown(maze: var Maze, x, y: int): tuple[x, y: int] =
+  maze.stage[y][x] = road
   var y2 = y
   var cell = maze.stage[y2+1][x]
   var cell2 = maze.stage[y2+2][x]
