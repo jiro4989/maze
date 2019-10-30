@@ -154,10 +154,12 @@ proc newMazeByDigging*(width, height: int): Maze =
   var (x, y) = result.newStartPos()
   while result.isContinuableToDig():
     while result.isDiggable(x, y):
-      (x, y) = result.randDig(x, y)
+      discard result.randDig(x, y)
       echo result.format(" ", "#")
+      (x, y) = result.newStartPos()
+      while result.stage[y][x] != road:
+        (x, y) = result.newStartPos()
     (x, y) = result.newStartPos()
-    let stg = result.stage
-    while stg[y][x] != road:
+    while result.stage[y][x] != road:
       (x, y) = result.newStartPos()
 
