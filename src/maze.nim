@@ -1,3 +1,25 @@
+## maze is a module to generate maze.
+## You can select algorithm to generate maze.
+##
+## pole down algorithm
+## -------------------
+##
+
+runnableExamples:
+  import maze
+  ## width and height must be odd.
+  var m = newMazeByPoleDown(19, 19)
+  echo m.format(" ", "#")
+
+## digging algorithm
+## -----------------
+##
+
+runnableExamples:
+  import maze
+  var m = newMazeByDigging(20, 20)
+  echo m.format(" ", "#")
+
 import mazepkg/[pole_down, dig]
 export poledown, dig
 

@@ -107,6 +107,9 @@ iterator generatesMazeProcessByPoleDown*(width, height: int, randomSeed = true, 
   ## ータとして返却する。
   ##
   ## **Note:** `width` と `height` は奇数でなければいけません。
+  ##
+  ## See also:
+  ## * `newMazeByPoleDown proc <#newMazeByPoleDown,int,int,int>`_
   runnableExamples:
     ## Generate random maze
     for maze in generatesMazeProcessByPoleDown(19, 19):
