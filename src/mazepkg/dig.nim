@@ -135,6 +135,13 @@ proc newMazeByDigging*(width, height: int, randomSeed = true, seed = 0): Maze =
   ## **Japanese:**
   ##
   ## 穴掘り法で迷路を生成する。
+  runnableExamples:
+    ## Generate random maze
+    var maze = newMazeByDigging(20, 20)
+    echo maze.format(" ", "#")
+    ## Set random seed
+    var maze2 = newMazeByDigging(20, 20, randomSeed = true, seed = 1)
+    echo maze2.format(" ", "#")
   result.width = width
   result.height = height
   result.stage = newSeqWith(height, newSeqWith(width, wall))
@@ -165,6 +172,13 @@ iterator generatesMazeProcessByDigging*(width, height: int, randomSeed = true, s
   ##
   ## 穴掘り法で迷路を生成する。最終的に生成の完了した迷路の、生成の過程をイテレ
   ## ータとして返却する。
+  ##
+  ## See also:
+  ## * `newMazeByDigging proc <#newMazeByDigging,int,int,int>`_
+  runnableExamples:
+    ## Generate random maze
+    for maze in generatesMazeProcessByDigging(20, 20):
+      echo maze.format(" ", "#")
   var maze = Maze(width: width, height: height, stage: newSeqWith(height, newSeqWith(width, wall)))
   maze.setRoadFrame()
 
