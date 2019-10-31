@@ -2,7 +2,10 @@ import mazepkg/[pole_down, dig]
 export poledown, dig
 
 when isMainModule:
-  import parseopt, os, strutils
+  import parseopt, logging
+  from os import commandLineParams
+  from strutils import parseInt
+  from strformat import `&`
 
   type
     Options = object
@@ -38,6 +41,9 @@ Options:
     -n, --no-separator             NOT print separators when '--print-process'
                                    option was on
     """
+
+  var logger = newConsoleLogger(fmtStr = verboseFmtStr, useStderr = true)
+  addHandler(logger)
 
   proc getCmdOpts(params: seq[string]): Options =
     ## コマンドライン引数を解析して返す。
@@ -76,7 +82,7 @@ Options:
           result.useRandomSeed = false
           result.seed = val.parseInt()
           if result.seed == 0:
-            echo doc
+            error "seed must NOT be 0. see help (--help)"
             quit 1
         of "print-process", "p":
           result.printProcess = true
@@ -118,7 +124,7 @@ Options:
     of "dig":
       printDigMaze()
     else:
-      echo "不正なアルゴリズム指定"
+      error &"illegal algorithm. (algorithm = {opts.algorithm})"
       return 1
 
   quit main()
