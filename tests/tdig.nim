@@ -2,22 +2,16 @@ import unittest
 
 include mazepkg/dig
 
-suite "newMazeWithFilledWall":
-  test "width = 7, height = 5":
-    let stg = @[
-      @[wall, wall, wall, wall, wall, wall, wall, ],
-      @[wall, wall, wall, wall, wall, wall, wall, ],
-      @[wall, wall, wall, wall, wall, wall, wall, ],
-      @[wall, wall, wall, wall, wall, wall, wall, ],
-      @[wall, wall, wall, wall, wall, wall, wall, ],
-      ]
-    check newMazeWithFilledWall(7, 5) == Maze(width: 7, height: 5, stage: stg)
+proc genMaze(w, h: int): Maze =
+  result.width = w
+  result.height = h
+  result.stage = newSeqWith(h, newSeqWith(w, wall))
 
 suite "setRoadFrame":
   setup:
     let width = 7
     let height = 5
-    var maze = newMazeWithFilledWall(width, height)
+    var maze = genMaze(width, height)
   test "setRoadFrame":
     maze.setRoadFrame()
     check maze.stage == @[
@@ -32,7 +26,7 @@ suite "digUp, digLeft, digRight, digDown":
   setup:
     let width = 11
     let height = 11
-    var maze = newMazeWithFilledWall(width, height)
+    var maze = genMaze(width, height)
     maze.setRoadFrame()
 
   test "digUp":
@@ -168,7 +162,7 @@ suite "newStartPos":
   setup:
     let width = 11
     let height = 21
-    var maze = newMazeWithFilledWall(width, height)
+    var maze = genMaze(width, height)
     maze.setRoadFrame()
   test "奇数の位置以外を返却しないことの検証":
     for i in 1..10000:
