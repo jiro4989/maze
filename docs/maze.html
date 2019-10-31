@@ -823,6 +823,8 @@ function main() {
     </select>
   </div>
   <ul class="simple simple-toc" id="toc-list">
+<li><a class="reference" id="pole-down-algorithm_toc" href="#pole-down-algorithm">pole down algorithm</a></li>
+<li><a class="reference" id="digging-algorithm_toc" href="#digging-algorithm">digging algorithm</a></li>
 <li>
   <a class="reference reference-toplevel" href="#6" id="56">Imports</a>
   <ul class="simple simple-toc-section">
@@ -842,7 +844,22 @@ function main() {
   <div class="nine columns" id="content">
   <div id="tocRoot"></div>
   
-  <p class="module-desc"></p>
+  <p class="module-desc">maze is a module to generate maze. You can select algorithm to generate maze.
+<h1><a class="toc-backref" id="pole-down-algorithm" href="#pole-down-algorithm">pole down algorithm</a></h1>
+<p><strong class="examples_text">Examples:</strong></p>
+<pre class="listing"><span class="Keyword">import</span>
+  <span class="Identifier">maze</span>
+
+<span class="Comment">## width and height must be odd.</span>
+<span class="Keyword">var</span> <span class="Identifier">m</span> <span class="Other">=</span> <span class="Identifier">newMazeByPoleDown</span><span class="Other">(</span><span class="DecNumber">19</span><span class="Other">,</span> <span class="DecNumber">19</span><span class="Other">)</span>
+<span class="Identifier">echo</span> <span class="Identifier">m</span><span class="Other">.</span><span class="Identifier">format</span><span class="Other">(</span><span class="StringLit">&quot; &quot;</span><span class="Other">,</span> <span class="StringLit">&quot;#&quot;</span><span class="Other">)</span></pre>
+<h1><a class="toc-backref" id="digging-algorithm" href="#digging-algorithm">digging algorithm</a></h1>
+<p><strong class="examples_text">Examples:</strong></p>
+<pre class="listing"><span class="Keyword">import</span>
+  <span class="Identifier">maze</span>
+
+<span class="Keyword">var</span> <span class="Identifier">m</span> <span class="Other">=</span> <span class="Identifier">newMazeByDigging</span><span class="Other">(</span><span class="DecNumber">20</span><span class="Other">,</span> <span class="DecNumber">20</span><span class="Other">)</span>
+<span class="Identifier">echo</span> <span class="Identifier">m</span><span class="Other">.</span><span class="Identifier">format</span><span class="Other">(</span><span class="StringLit">&quot; &quot;</span><span class="Other">,</span> <span class="StringLit">&quot;#&quot;</span><span class="Other">)</span></pre></p>
   <div class="section" id="6">
 <h1><a class="toc-backref" href="#6">Imports</a></h1>
 <dl class="item">
@@ -861,7 +878,7 @@ function main() {
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small>Made with Nim. Generated: 2019-10-31 15:05:44 UTC</small>
+        <small>Made with Nim. Generated: 2019-10-31 15:17:33 UTC</small>
       </div>
     </div>
   </div>
