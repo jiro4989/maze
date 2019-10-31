@@ -9,6 +9,7 @@
 
 import sequtils, strutils, random, strformat
 import types
+export types
 
 proc setRoadFrame(maze: var Maze) =
   ## 一番外の外壁に道をセット
@@ -136,14 +137,10 @@ proc newMazeByDigging*(width, height: int, randomSeed = true, seed = 0): Maze =
   while result.isContinuableToDig():
     while result.isDiggable(x, y):
       discard result.randDig(x, y)
-      echo result.format(" ", "#")
       (x, y) = result.newStartPos()
       while result.stage[y][x] != road:
         (x, y) = result.newStartPos()
-        #echo &"x:{x}, y:{y}"
     (x, y) = result.newStartPos()
     while result.stage[y][x] != road:
       (x, y) = result.newStartPos()
-      #echo &"x:{x}, y:{y}"
-    #echo &"x:{x}, y:{y}"
 

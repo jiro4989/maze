@@ -9,6 +9,7 @@
 
 import sequtils, strutils, random
 import types
+export types
 
 proc setFrame(maze: var Maze) =
   ## 一番外の外壁に壁をセット
