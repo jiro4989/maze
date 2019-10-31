@@ -144,3 +144,31 @@ proc newMazeByDigging*(width, height: int, randomSeed = true, seed = 0): Maze =
     while result.stage[y][x] != road:
       (x, y) = result.newStartPos()
 
+iterator generatesMazeProcessByDigging*(width, height: int, randomSeed = true, seed = 0): Maze =
+  ## 穴掘り法で迷路を生成する。
+  var maze = Maze(
+    width: width,
+    height: height,
+    stage: newSeqWith(height, newSeqWith(width, wall))
+    )
+  maze.setRoadFrame()
+
+  if randomSeed:
+    randomize()
+  else:
+    randomize(seed)
+
+  # ランダムに一箇所点を選ぶ。
+  # 選んだ点が壁にならないようにする。
+  var (x, y) = maze.newStartPos()
+  while maze.isContinuableToDig():
+    while maze.isDiggable(x, y):
+      discard maze.randDig(x, y)
+      (x, y) = maze.newStartPos()
+      yield maze
+      while maze.stage[y][x] != road:
+        (x, y) = maze.newStartPos()
+    (x, y) = maze.newStartPos()
+    while maze.stage[y][x] != road:
+      (x, y) = maze.newStartPos()
+

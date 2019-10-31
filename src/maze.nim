@@ -77,7 +77,9 @@ Options:
   proc main(): int =
     let opts = getCmdOpts(commandLineParams())
     if opts.printProcess:
-      discard
+      for maze in generatesMazeProcessByDigging(opts.width, opts.height, opts.useRandomSeed, opts.seed):
+        echo maze.format(opts.road, opts.wall)
+        echo "-----"
     else:
       var maze = newMazeByDigging(opts.width, opts.height, opts.useRandomSeed, opts.seed)
       echo maze.format(opts.road, opts.wall)
