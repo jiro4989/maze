@@ -7,6 +7,7 @@ when isMainModule:
   type
     Options = object
       width, height: int
+      road, wall: string
       useRandomSeed: bool
       seed: int
       printProcess: bool
@@ -26,6 +27,8 @@ Options:
     -v, --version            print version and exit
     -W, --width:<WIDTH>      set maze width [default: 40]
     -H, --height:<HEIGHT>    set maze height [default: 40]
+    -r, --road:<ROAD>        set road character [default: " "]
+    -w, --wall:<WALL>        set all character [default: "#"]
     -s, --seed:<SEED>        set random seed. seed must NOT be 0
     -p, --print-process      print generating process
     """
@@ -36,6 +39,8 @@ Options:
     var optParser = initOptParser(params)
     result.width = 40
     result.height = 40
+    result.road = " "
+    result.wall = "#"
     result.useRandomSeed = true
 
     for kind, key, val in optParser.getopt():
@@ -54,6 +59,10 @@ Options:
           result.width = val.parseInt()
         of "height", "H":
           result.height = val.parseInt()
+        of "road", "r":
+          result.road = val
+        of "wall", "w":
+          result.wall = val
         of "seed", "s":
           result.useRandomSeed = false
           result.seed = val.parseInt()
@@ -71,7 +80,7 @@ Options:
       discard
     else:
       var maze = newMazeByDigging(opts.width, opts.height, opts.useRandomSeed, opts.seed)
-      echo maze.format(" ", "#")
+      echo maze.format(opts.road, opts.wall)
 
   quit main()
 
