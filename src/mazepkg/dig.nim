@@ -146,11 +146,7 @@ proc newMazeByDigging*(width, height: int, randomSeed = true, seed = 0): Maze =
 
 iterator generatesMazeProcessByDigging*(width, height: int, randomSeed = true, seed = 0): Maze =
   ## 穴掘り法で迷路を生成する。
-  var maze = Maze(
-    width: width,
-    height: height,
-    stage: newSeqWith(height, newSeqWith(width, wall))
-    )
+  var maze = Maze(width: width, height: height, stage: newSeqWith(height, newSeqWith(width, wall)))
   maze.setRoadFrame()
 
   if randomSeed:

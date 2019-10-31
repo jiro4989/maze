@@ -78,3 +78,28 @@ proc newMazeByPoleDown*(width, height: int, randomSeed = true, seed = 0): Maze =
       let noTop = y != 1 # 最初の一回目だけ上にも倒す
       result.randPushDown(x*2, y*2, noTop)
 
+iterator generatesMazeProcessByPoleDown*(width, height: int, randomSeed = true, seed = 0): Maze =
+  ## 棒倒し法で迷路を生成する。
+  var maze = Maze()
+  maze.width = width
+  maze.height = height
+  maze.stage = newSeqWith(height, newSeqWith(width, road))
+  maze.setFrame()
+
+  # 等間隔の内壁をセット
+  for y in 1..<int(height/2):
+    for x in 1..<int(width/2):
+      maze.stage[y*2][x*2] = wall
+
+  if randomSeed:
+    randomize()
+  else:
+    randomize(seed)
+
+  # 棒倒しを実施
+  for y in 1..<int(height/2):
+    for x in 1..<int(width/2):
+      let noTop = y != 1 # 最初の一回目だけ上にも倒す
+      maze.randPushDown(x*2, y*2, noTop)
+      yield maze
+
