@@ -19,3 +19,16 @@ task docs, "Generate documents":
   exec "nimble doc src/mazepkg/dig.nim -o:docs/dig.html"
   exec "nimble doc src/mazepkg/pole_down.nim -o:docs/pole_down.html"
   exec "nimble doc src/maze.nim -o:docs/maze.html"
+
+task ci, "Run CI":
+  exec "nim -v"
+  exec "nimble -v"
+  exec "nimble check"
+  exec "nimble install -Y"
+  exec "nimble test -Y"
+  exec "nimble docs -Y"
+  exec "nimble build -d:release -Y"
+  #exec "nimble examples"
+  #exec "nimble buildjs"
+  exec "./bin/maze -h"
+  exec "./bin/maze -v"
