@@ -12,6 +12,7 @@ when isMainModule:
       seed: int
       printProcess: bool
       algorithm: string
+      noSeparator: bool
       args: seq[string]
 
   const
@@ -34,6 +35,8 @@ Options:
     -p, --print-process            print generating process
     -a, --algorithm:<ALGORITHM>    set algorithm to generate maze [default: dig]
                                    selectable algorithm is [poledown | dig]
+    -n, --no-separator             NOT print separators when '--print-process'
+                                   option was on
     """
 
   proc getCmdOpts(params: seq[string]): Options =
@@ -79,26 +82,32 @@ Options:
           result.printProcess = true
         of "algorithm", "a":
           result.algorithm = val
+        of "no-separator", "n":
+          result.noSeparator = true
       of cmdEnd:
         assert false # cannot happen
 
   proc main(): int =
     let opts = getCmdOpts(commandLineParams())
 
-    proc printPoleDownMaze =
+    template printSeparator =
+      if not opts.noSeparator:
+        echo "-----"
+
+    template printPoleDownMaze =
       if opts.printProcess:
         for maze in generatesMazeProcessByPoleDown(opts.width, opts.height, opts.useRandomSeed, opts.seed):
           echo maze.format(opts.road, opts.wall)
-          echo "-----"
+          printSeparator()
       else:
         let maze = newMazeByPoleDown(opts.width, opts.height, opts.useRandomSeed, opts.seed)
         echo maze.format(opts.road, opts.wall)
 
-    proc printDigMaze =
+    template printDigMaze =
       if opts.printProcess:
         for maze in generatesMazeProcessByDigging(opts.width, opts.height, opts.useRandomSeed, opts.seed):
           echo maze.format(opts.road, opts.wall)
-          echo "-----"
+          printSeparator()
       else:
         let maze = newMazeByDigging(opts.width, opts.height, opts.useRandomSeed, opts.seed)
         echo maze.format(opts.road, opts.wall)
