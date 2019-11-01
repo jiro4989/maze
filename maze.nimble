@@ -28,7 +28,18 @@ task ci, "Run CI":
   exec "nimble test -Y"
   exec "nimble docs -Y"
   exec "nimble build -d:release -Y"
-  #exec "nimble examples"
-  #exec "nimble buildjs"
   exec "./bin/maze -h"
   exec "./bin/maze -v"
+
+import strformat
+
+task archive, "Create archived assets":
+  let app = "maze"
+  let assets = &"{app}_{buildOS}"
+  let dir = &"dist/{assets}"
+  mkDir &"{dir}/bin"
+  cpFile &"bin/{app}", &"{dir}/bin/{app}"
+  cpFile "LICENSE", &"{dir}/LICENSE"
+  cpFile "README.adoc", &"{dir}/README.adoc"
+  withDir "dist":
+    exec &"tar czf {assets}.tar.gz {assets}"
