@@ -19,7 +19,9 @@ jobs:
         choosenim update stable
 
     - name: Build
-      run: nimble docs
+      run: |
+        export PATH=$HOME/.nimble/bin:$PATH
+        nimble docs
 
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v2.4.0
