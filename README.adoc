@@ -1,0 +1,78 @@
+= maze
+:toc: left
+:sectnums:
+
+`maze` is a module and command to generate maze.
+You can select algorithm to generate maze.
+
+== Development
+
+Nim version 1.0.2
+
+== Usage examples
+
+=== Installation
+
+[source,bash]
+----
+nimble install maze
+----
+
+=== command
+
+Generate maze.
+
+[source,bash]
+----
+maze
+----
+
+Change width and height.
+
+[source,bash]
+----
+maze -W:65 -H:43
+----
+
+Change algorithm.
+
+[source,bash]
+----
+maze -a:poledown
+----
+
+Print generating process.
+
+[source,bash]
+----
+maze -p
+----
+
+=== API
+
+Pole down maze.
+
+[source,nim]
+----
+import maze
+## width and height must be odd.
+var m = newMazeByPoleDown(19, 19)
+echo m.format(" ", "#")
+----
+
+Digging maze.
+
+[source,nim]
+----
+import maze
+var m = newMazeByDigging(20, 20)
+echo m.format(" ", "#")
+----
+
+== Document
+
+* https://jiro4989.github.io/maze/maze.html
+
+== License
+
+MIT
