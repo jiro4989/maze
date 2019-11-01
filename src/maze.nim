@@ -92,10 +92,8 @@ Options:
           quit 0
         of "width", "W":
           result.width = val.parseInt()
-          result.width = int(result.width / 2) * 2
         of "height", "H":
           result.height = val.parseInt()
-          result.height = int(result.height / 2) * 2
         of "road", "r":
           result.road = val
         of "wall", "w":
@@ -123,12 +121,15 @@ Options:
         echo "-----"
 
     template printPoleDownMaze =
+      # 棒倒し方は奇数幅でないといけない
+      let width = int(opts.width / 2) * 2 + 1
+      let height = int(opts.height / 2) * 2 + 1
       if opts.printProcess:
-        for maze in generatesMazeProcessByPoleDown(opts.width, opts.height, opts.useRandomSeed, opts.seed):
+        for maze in generatesMazeProcessByPoleDown(width, height, opts.useRandomSeed, opts.seed):
           echo maze.format(opts.road, opts.wall)
           printSeparator()
       else:
-        let maze = newMazeByPoleDown(opts.width, opts.height, opts.useRandomSeed, opts.seed)
+        let maze = newMazeByPoleDown(width, height, opts.useRandomSeed, opts.seed)
         echo maze.format(opts.road, opts.wall)
 
     template printDigMaze =
