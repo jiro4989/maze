@@ -42,7 +42,7 @@ when isMainModule:
 
   const
     appName = "maze"
-    version = &"""{appName} version 1.0.0
+    version = &"""{appName} version 1.0.1
 Copyright (c) 2019 jiro4989
 Released under the MIT License.
 https://github.com/jiro4989/maze"""

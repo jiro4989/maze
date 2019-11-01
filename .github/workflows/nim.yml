@@ -1,4 +1,4 @@
-name: Nim
+name: Build and test Nim
 
 on: [push]
 
