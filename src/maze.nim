@@ -41,13 +41,25 @@ when isMainModule:
       args: seq[string]
 
   const
-    version = "v0.1.0"
-    doc = """maze generates a random maze.
+    appName = "maze"
+    version = &"""{appName} version 1.0.0
+Copyright (c) 2019 jiro4989
+Released under the MIT License.
+https://github.com/jiro4989/maze"""
+
+    doc = &"""{appName} generates a random maze.
 
 Usage:
-    maze -h | --help
-    maze -v | --version
-    maze [options]
+    {appName} -h | --help
+    {appName} -v | --version
+    {appName} [options]
+
+Examples:
+    {appName}
+    {appName} -W:65 -H:43
+    {appName} -r:- -w:0
+    {appName} -a:poledown
+    {appName} -p
 
 Options:
     -h, --help                     print help and exit
