@@ -7,14 +7,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
+
     - name: Install nim
       run: |
-        export PATH=$HOME/.nimble/bin:$PATH        
+        export PATH=$HOME/.nimble/bin:$PATH
         curl https://nim-lang.org/choosenim/init.sh -sSf > init.sh
         sh init.sh -y
         choosenim update stable
+
     - name: Run CI task
       run: |
-        export PATH=$HOME/.nimble/bin:$PATH        
+        export PATH=$HOME/.nimble/bin:$PATH
         nimble ci
 
