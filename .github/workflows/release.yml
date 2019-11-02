@@ -28,6 +28,6 @@ jobs:
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
-          files: 'dist/*.tar.gz'
+          files: 'dist/maze_linux.tar.gz'
         env:
           GITHUB_TOKEN: ${{ secrets.ACTIONS_DEPLOY_KEY }}
