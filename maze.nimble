@@ -15,10 +15,8 @@ binDir        = "bin"
 requires "nim >= 1.0.2"
 
 task docs, "Generate documents":
-  exec "nimble doc src/mazepkg/types.nim -o:docs/types.html"
-  exec "nimble doc src/mazepkg/dig.nim -o:docs/dig.html"
-  exec "nimble doc src/mazepkg/pole_down.nim -o:docs/pole_down.html"
-  exec "nimble doc src/maze.nim -o:docs/maze.html"
+  rmDir "docs"
+  exec "nimble doc --project --index:on -o:docs src/maze.nim"
 
 task ci, "Run CI":
   exec "nim -v"
