@@ -2,6 +2,9 @@
 :toc: left
 :sectnums:
 
+image:https://github.com/jiro4989/maze/workflows/build/badge.svg[]
+image:https://github.com/jiro4989/maze/workflows/docs/badge.svg[]
+
 `maze` is a module and command to generate maze.
 You can select algorithm to generate maze.
 
