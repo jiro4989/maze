@@ -1,0 +1,4 @@
+Japanese	pole_down.html#japanese	 Japanese	
+See also:	pole_down.html#japanese-see-alsocolon	  See also:	
+newMazeByPoleDown	mazepkg/pole_down.html#newMazeByPoleDown,int,int,int	pole_down: newMazeByPoleDown(width, height: int; randomSeed = true; seed = 0): Maze	
+generatesMazeProcessByPoleDown	mazepkg/pole_down.html#generatesMazeProcessByPoleDown.i,int,int,int	pole_down: generatesMazeProcessByPoleDown(width, height: int; randomSeed = true; seed = 0): Maze	

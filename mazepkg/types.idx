@@ -1,0 +1,5 @@
+road	mazepkg/types.html#road	types: road	
+wall	mazepkg/types.html#wall	types: wall	
+Maze	mazepkg/types.html#Maze	types: Maze	
+format	mazepkg/types.html#format,Maze,string,string	types: format(maze: Maze; r, w: string): string	
+`$`	mazepkg/types.html#$,Maze	types: `$`(self: Maze): string	

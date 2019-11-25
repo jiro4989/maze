@@ -1,0 +1,4 @@
+Japanese	dig.html#japanese	 Japanese	
+See also	dig.html#japanese-see-also	  See also	
+newMazeByDigging	mazepkg/dig.html#newMazeByDigging,int,int,int	dig: newMazeByDigging(width, height: int; randomSeed = true; seed = 0): Maze	
+generatesMazeProcessByDigging	mazepkg/dig.html#generatesMazeProcessByDigging.i,int,int,int	dig: generatesMazeProcessByDigging(width, height: int; randomSeed = true; seed = 0): Maze	
